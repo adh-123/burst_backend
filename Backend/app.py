@@ -57,7 +57,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-       "https://burst-backend-f491.onrender.com"
+       "https://frontend-burst2.onrender.com"
     ],
     allow_credentials=True,
     allow_methods=["*"],
