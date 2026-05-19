@@ -16,8 +16,6 @@ class ConnectionManager:
         room_id: int
     ):
 
-        await websocket.accept()
-
         if room_id not in self.active_connections:
             self.active_connections[room_id] = []
 
@@ -42,7 +40,9 @@ class ConnectionManager:
             and websocket in self.active_connections[room_id]
         ):
 
-            self.active_connections[room_id].remove(
+            self.active_connections[
+                room_id
+            ].remove(
                 websocket
             )
 
@@ -64,5 +64,4 @@ class ConnectionManager:
             )
 
 
-# MANAGER OBJECT
 manager = ConnectionManager()

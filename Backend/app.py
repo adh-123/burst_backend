@@ -498,7 +498,6 @@ async def websocket_endpoint(
 
     print("WS endpoint hit")
     print("Room:", room_id)
-    print("Headers:", dict(websocket.headers))
 
     try:
 
@@ -507,39 +506,72 @@ async def websocket_endpoint(
             websocket.headers.get("origin")
         )
 
+        await websocket.accept()
+
+        print(
+            "Accepted manually"
+        )
+
         await manager.connect(
             websocket,
             room_id
         )
 
-        print(
-            f"Connected room {room_id}"
-        )
-
         db_generator = get_db()
-        db = next(db_generator)
+
+        db = next(
+            db_generator
+        )
 
         while True:
 
             data = await websocket.receive_text()
 
-            print("Received:", data)
-
-            parsed_data = json.loads(data)
-
-            print("Parsed:", parsed_data)
-
-            new_message = Message(
-                content=parsed_data.get("content"),
-                user_id=parsed_data.get("user_id"),
-                room_id=parsed_data.get("room_id"),
+            print(
+                "Received:",
+                data
             )
 
-            db.add(new_message)
-            db.commit()
-            db.refresh(new_message)
+            parsed_data = json.loads(
+                data
+            )
 
-            parsed_data["id"] = new_message.id
+            print(
+                "Parsed:",
+                parsed_data
+            )
+
+            new_message = Message(
+
+                content=
+                parsed_data.get(
+                    "content"
+                ),
+
+                user_id=
+                parsed_data.get(
+                    "user_id"
+                ),
+
+                room_id=
+                parsed_data.get(
+                    "room_id"
+                ),
+            )
+
+            db.add(
+                new_message
+            )
+
+            db.commit()
+
+            db.refresh(
+                new_message
+            )
+
+            parsed_data["id"] = (
+                new_message.id
+            )
 
             parsed_data["created_at"] = str(
                 new_message.created_at
@@ -547,7 +579,9 @@ async def websocket_endpoint(
 
             await manager.broadcast(
                 room_id,
-                json.dumps(parsed_data)
+                json.dumps(
+                    parsed_data
+                )
             )
 
     except Exception as e:
