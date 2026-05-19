@@ -56,7 +56,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://frontend-burst2.onrender.com"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -495,12 +495,21 @@ async def websocket_endpoint(
     room_id: int
 ):
 
-    try:
+   try:
 
-        await manager.connect(
-            websocket,
-            room_id
-        )
+    print(
+        "Origin:",
+        websocket.headers.get("origin")
+    )
+
+    await manager.connect(
+        websocket,
+        room_id
+    )
+
+    print(
+        f"Connected room {room_id}"
+    )
 
         db_generator = get_db()
         db = next(db_generator)
