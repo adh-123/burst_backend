@@ -488,36 +488,37 @@ def delete_room(
         "message":
         "Room deleted"
     }
-
-## WEBSOCKET
+# WEBSOCKET
 @app.websocket("/ws/{room_id}")
 async def websocket_endpoint(
     websocket: WebSocket,
     room_id: int
 ):
 
-    await websocket.accept()   # <-- add this
-
-    await manager.connect(
-        websocket,
-        room_id
-    )
-
-    db_generator = get_db()
-    db = next(db_generator)
-
     try:
+
+        await manager.connect(
+            websocket,
+            room_id
+        )
+
+        db_generator = get_db()
+        db = next(db_generator)
 
         while True:
 
             data = await websocket.receive_text()
 
+            print("Received:", data)
+
             parsed_data = json.loads(data)
 
+            print("Parsed:", parsed_data)
+
             new_message = Message(
-                content=parsed_data["content"],
-                user_id=parsed_data["user_id"],
-                room_id=parsed_data["room_id"],
+                content=parsed_data.get("content"),
+                user_id=parsed_data.get("user_id"),
+                room_id=parsed_data.get("room_id"),
             )
 
             db.add(new_message)
@@ -536,6 +537,7 @@ async def websocket_endpoint(
             )
 
     except Exception as e:
+
         print("WebSocket Error:", e)
 
         manager.disconnect(
