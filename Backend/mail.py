@@ -23,8 +23,8 @@ def send_reset_email(
     try:
 
         reset_link = (
-            f"http://localhost:5173/reset-password/{token}"
-        )
+    f"https://frontend-burst2.onrender.com/reset-password/{token}"
+)
 
         message = Mail(
 

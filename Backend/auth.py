@@ -17,6 +17,7 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 def hash_password(password):
+    password = str(password).strip()
     return pwd_context.hash(password[:72])
 
 
