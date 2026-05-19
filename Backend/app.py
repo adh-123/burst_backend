@@ -495,21 +495,21 @@ async def websocket_endpoint(
     room_id: int
 ):
 
-   try:
+    try:
 
-    print(
-        "Origin:",
-        websocket.headers.get("origin")
-    )
+        print(
+            "Origin:",
+            websocket.headers.get("origin")
+        )
 
-    await manager.connect(
-        websocket,
-        room_id
-    )
+        await manager.connect(
+            websocket,
+            room_id
+        )
 
-    print(
-        f"Connected room {room_id}"
-    )
+        print(
+            f"Connected room {room_id}"
+        )
 
         db_generator = get_db()
         db = next(db_generator)
@@ -547,7 +547,10 @@ async def websocket_endpoint(
 
     except Exception as e:
 
-        print("WebSocket Error:", e)
+        print(
+            "WebSocket Error:",
+            e
+        )
 
         manager.disconnect(
             websocket,
