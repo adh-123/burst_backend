@@ -495,6 +495,9 @@ async def websocket_endpoint(
     room_id: int
 ):
 
+    print("WS endpoint hit")
+    print("Room:", room_id)
+
     try:
 
         print(
